@@ -11,11 +11,28 @@ export default function FormAbout() {
   const dispatch = useAppDispatch();
 
   const dateRef = useRef<any>(null);
+  const photoRef = useRef<any>(null);
 
-  const handleChangePhoto = () => {}
+  const handleChangePhoto = () => {
+    photoRef.current.click();
+  }
 
   const openDate = () => {
     dateRef.current.showPicker();
+  }
+
+  const handlePhotoChange = (evt: any) => {
+    const getFile = evt.target.files[0];
+    if (["image/jpeg", "image/png"].includes(getFile.type)) {
+      const reader = new FileReader();
+      reader.readAsDataURL(getFile);
+      reader.onload = function () {
+        dispatch(setUserState({...userState.user, photo: reader.result}));
+      };
+      reader.onerror = function (error) {
+        console.log('Error: ', error);
+      };
+    }
   }
 
   const handleDateChange = (evt: any) => {
@@ -43,11 +60,16 @@ export default function FormAbout() {
       <div className="flex items-center gap-[12px] mt-6">
         <button
           type="button"
-          className="w-[58px] h-[58px] rounded-[16px] bg-[#FFFFFF14] flex items-center justify-center"
+          className="w-[58px] h-[58px] rounded-[16px] bg-[#FFFFFF14] flex items-center justify-center overflow-hidden"
           onClick={handleChangePhoto}
         >
-          <Image src={"/icons/plus-gold.png"} width={20} height={20} alt="plus gold icon" />
+          {userState.user && userState.user.photo ? (
+            <Image src={userState.user.photo} width={58} height={58} alt="user" />
+          ) : (
+            <Image src={"/icons/plus-gold.png"} width={20} height={20} alt="plus gold icon" />
+          )}
         </button>
+        <input type="file" hidden ref={photoRef} onChange={handlePhotoChange} />
         <span className="text-xs text-white">Add image</span>
       </div>
       <div className="flex flex-col gap-[12px] mt-[20px]">

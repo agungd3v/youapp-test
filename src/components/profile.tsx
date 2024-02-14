@@ -23,8 +23,6 @@ export default function Profile() {
     rts.push("/interest");
   }
 
-  const handleChangePhoto = () => {}
-
   return (
     <div className="px-[18px]">
       <CardPhotoIndex />
@@ -73,7 +71,7 @@ export default function Profile() {
             <div className="flex flex-wrap gap-1">
               {userState.user.interests.map((ab: any, cd: number) => {
                 return (
-                  <div key={cd} className="text-white text-xs flex items-center gap-[6px] px-[8px] h-[31px] rounded-[4px] bg-[#FFFFFF1A]">{ab}</div>
+                  <div key={cd} className="text-white text-xs flex items-center gap-[6px] px-[12px] h-[31px] rounded-full bg-[#FFFFFF1A]">{ab}</div>
                 )
               })}
             </div>

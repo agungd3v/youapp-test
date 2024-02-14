@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { useAppDispatch } from "../lib/store";
 import { setAuthState, setUserState } from "../store/userSlice";
 import { useEffect } from "react";
+import { setUserCookie } from "@/utils/cookies";
 
 export default function Template({children}: {children: React.ReactNode}) {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ export default function Template({children}: {children: React.ReactNode}) {
         if ([200, 201].includes(request.status)) {
           const response = await request.json();
           console.log(response.data);
-          Cookies.set("yp_pfe", JSON.stringify(response.data));
+          setUserCookie(JSON.stringify(response.data));
 
           const userCook = JSON.parse(Cookies.get("yp_pfe") ?? "undefined");
           if (userCook && typeof userCook.name === "undefined") {
@@ -28,7 +29,7 @@ export default function Template({children}: {children: React.ReactNode}) {
               body: JSON.stringify(body)
             });
             if ([200, 201].includes(requestNext.status)) {
-              Cookies.set("yp_pfe", JSON.stringify(body));
+              setUserCookie(JSON.stringify(body));
 
               dispatch(setAuthState(true));
               dispatch(setUserState(body));

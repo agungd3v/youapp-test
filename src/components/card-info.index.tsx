@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { setFormAboutState } from "@/store/formSlice";
 import { setUserState } from "@/store/userSlice";
+import { toastInfo } from "@/utils/toast";
+import { setUserCookie } from "@/utils/cookies";
 
 interface CProps {
   title: string;
@@ -19,7 +21,6 @@ export default function CardInfoIndex({title, action, children, identity}: CProp
   const dispatch = useAppDispatch();
 
   const handleUpdate = async () => {
-    console.log(userState.user);
     const request = await fetch("/api/profile", {
       method: "PUT",
       body: JSON.stringify({...userState.user, interests: userState.user.interests})
@@ -27,8 +28,11 @@ export default function CardInfoIndex({title, action, children, identity}: CProp
 
     if ([200, 201].includes(request.status)) {
       const payload = {...userState.user, interests: userState.user.interests};
-      Cookies.set("yp_pfe", JSON.stringify(payload));
+      setUserCookie(JSON.stringify(payload));
       dispatch(setUserState(payload));
+    } else {
+      const response = await request.json();
+      toastInfo(response.message);
     }
 
     dispatch(setFormAboutState(false));

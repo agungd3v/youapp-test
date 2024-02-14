@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../lib/store";
 import { setAuthState, setUserState } from "../store/userSlice";
+import { toastInfo } from "@/utils/toast";
+import { setUserCookie } from "@/utils/cookies";
 
 export default function Header() {
   const rts = useRouter();
@@ -27,10 +29,14 @@ export default function Header() {
 
     if ([200, 201].includes(request.status)) {
       const payload = {...userState.user};
-      Cookies.set("yp_pfe", JSON.stringify(payload));
+      setUserCookie(JSON.stringify(payload));
       dispatch(setUserState(payload));
-      rts.replace("/");
+    } else {
+      const response = await request.json()
+      toastInfo(response.message);
     }
+
+    rts.replace("/");
   }
 
   return (
