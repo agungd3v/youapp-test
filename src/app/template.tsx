@@ -17,7 +17,6 @@ export default function Template({children}: {children: React.ReactNode}) {
         const request = await fetch("/api/profile");
         if ([200, 201].includes(request.status)) {
           const response = await request.json();
-          console.log(response.data);
           setUserCookie(JSON.stringify(response.data));
 
           const userCook = JSON.parse(Cookies.get("yp_pfe") ?? "undefined");

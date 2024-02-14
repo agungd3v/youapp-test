@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toastInfo, toastSuccess } from "@/utils/toast";
 import Image from "next/image";
 import Link from "next/link";
+import { validateTypeEmail } from "@/utils/globalFunction";
 
 type showHidePassword = {
   password: boolean;
@@ -51,8 +52,14 @@ export default function Register() {
   }
 
   const handleRegister = async () => {
-    // const validEmail = validateTypeEmail(registerInfo.email);
-    // console.log(validEmail);
+    const validEmail = validateTypeEmail(registerInfo.email);
+    if (!validEmail) {
+      return toastInfo("Invalid email format");
+    }
+    if (registerInfo.password != confirmPassword) {
+      return toastInfo("Confirm password is incorrect");
+    }
+
     setErrorMessage("");
 
     const request = await fetch("/api/auth/register", {
@@ -138,9 +145,8 @@ export default function Register() {
         <div className="mt-[10px] relative">
           <button
             type="button"
-            // className={`w-full h-[48px] rounded-[8px] text-sm text-white font-bold bg-gradient-blue transition-all ${loginInfo.username == "" || loginInfo.password == "" ? "opacity-50" : "shadow"}`}
-            className={`w-full h-[48px] rounded-[8px] text-sm text-white font-bold bg-gradient-blue transition-all shadow`}
-            // disabled={loginInfo.username == "" || loginInfo.password == "" ? true : false}
+            className={`w-full h-[48px] rounded-[8px] text-sm text-white font-bold bg-gradient-blue transition-all ${registerInfo.email == "" || registerInfo.username == "" || registerInfo.password == "" ? "opacity-50" : "shadow"}`}
+            disabled={registerInfo.email == "" || registerInfo.username == "" || registerInfo.password == "" ? true : false}
             onClick={handleRegister}
           >
             Register
