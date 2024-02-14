@@ -20,6 +20,9 @@ export default function CardPhotoIndex() {
         </button>
       </div>
       <div className="absolute bottom-[14px] left-[14px]">
+        {userState.user && userState.user.gender && (
+          <span className="text-xs text-white">{userState.user.gender == "M" ? "Male" : "Female"}</span>
+        )}
         <div className="flex items-center">
           {userState.user && <span className="font-bold text-white">@{userState.user.username},</span>}
         </div>

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { useAppSelector, useAppDispatch } from "@/lib/store";
-import { setInterests } from "@/store/userSlice";
+import { setUserState } from "@/store/userSlice";
 
 export default function InputInterest() {
   const userState = useAppSelector((state: any) => state.user);
@@ -15,7 +15,7 @@ export default function InputInterest() {
 
   const handleKeyUp = (evt: any) => {
     if ([13, 39].includes(evt.keyCode) && typeInterest !== "") {
-      dispatch(setInterests([...userState.interests, typeInterest]));
+      dispatch(setUserState({...userState.user, interests: [...userState.user.interests, typeInterest]}));
       setTypeInterest("");
     }
   }
@@ -29,13 +29,9 @@ export default function InputInterest() {
   }
 
   const handleEraseInterest = (param: number) => {
-    userState.interests.splice(param, 1);
-    setInterests([...userState.interests]);
+    userState.user.interests.splice(param, 1);
+    dispatch(setUserState({...userState.user, interests: [...userState.user.interests]}));
   }
-
-  useEffect(() => {
-    if (userState.user) dispatch(setInterests(userState.user.interests));
-  }, [userState.user]);
 
   return (
     <>
@@ -43,7 +39,7 @@ export default function InputInterest() {
         <p className="text-gradient-golden font-bold text-sm">Tell everyone about yourself</p>
         <h3 className="text-white font-bold text-[20px] mt-[8px]">What interest you?</h3>
         <div className="min-h-[46px] mt-[20px] rounded-[10px] py-[8px] px-[16px] bg-[#D9D9D90F] flex items-center flex-wrap gap-[4px]" onClick={handleFocusInput}>
-          {userState.interests.length > 0 && userState.interests.map((ab: string, cd: number) => {
+          {userState.user && userState.user.interests.length > 0 && userState.user.interests.map((ab: string, cd: number) => {
             return (
               <div key={cd} className="text-white text-xs flex items-center gap-[6px] px-[8px] h-[31px] rounded-[4px] bg-[#FFFFFF1A]">
                 <span>{ab}</span>

@@ -22,11 +22,11 @@ export default function Header() {
   const handleInterestUpdate = async () => {
     const request = await fetch("/api/profile", {
       method: "PUT",
-      body: JSON.stringify({...userState.user, interests: userState.interests})
+      body: JSON.stringify(userState.user)
     });
 
     if ([200, 201].includes(request.status)) {
-      const payload = {...userState.user, interests: userState.interests};
+      const payload = {...userState.user};
       Cookies.set("yp_pfe", JSON.stringify(payload));
       dispatch(setUserState(payload));
       rts.replace("/");

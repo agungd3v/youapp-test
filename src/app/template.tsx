@@ -1,7 +1,7 @@
 "use client";
 
 import Cookies from "js-cookie";
-import { useAppDispatch, useAppSelector } from "../lib/store";
+import { useAppDispatch } from "../lib/store";
 import { setAuthState, setUserState } from "../store/userSlice";
 import { useEffect } from "react";
 
